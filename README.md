@@ -347,15 +347,9 @@ Contributions are welcome! Please follow these steps:
 
 ---
 
-## 📝 License
-
-This project is open-source and available under the [MIT License](LICENSE).
-
----
-
 ## 👤 Author
 
-**Siddharth**
+**Siddharth Singh**
 - GitHub: [@Siddharthgitthub](https://github.com/Siddharthgitthub)
 
 ---
@@ -384,3 +378,4 @@ For issues, questions, or suggestions:
 Made with ❤️ by the RiskLens AI Team
 
 </div>
+
