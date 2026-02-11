@@ -3,8 +3,6 @@
 @tailwind utilities;
 
 body{
-  font-family: "Bebas Neue", sans-serif;
-  letter-spacing: 1px;
   background:#020617;
   color:white;
 }
