@@ -8,13 +8,17 @@ import axios from "axios";
 export default function Analysis() {
 
   const navigate = useNavigate();
+  const API = import.meta.env.VITE_API_URL;
 
-  // 30 behavioural answers default = 3
+  // 🔥 answers state
   const [answers, setAnswers] = useState(
     Object.fromEntries(
       Array.from({ length: 30 }, (_, i) => [`q${i + 1}`, 3])
     )
   );
+
+  // 🔥 loader state
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setAnswers({
@@ -23,9 +27,10 @@ export default function Analysis() {
     });
   };
 
-  // 🔥 SUBMIT TO BACKEND
+  // 🔥 SUBMIT
   const submit = async () => {
     try {
+      setLoading(true);
 
       const payload = {
         answers: Object.values(answers).map(Number)
@@ -33,22 +38,21 @@ export default function Analysis() {
 
       console.log("SENDING:", payload);
 
-      const res = await axios.post(
-        "https://risklens-ai.onrender.com/analyze",
-        payload
-      );
+      const res = await axios.post(`${API}/analyze`, payload);
 
       console.log("BACKEND RESPONSE:", res.data);
 
-      // save to localStorage (important)
       localStorage.setItem("risklensData", JSON.stringify(res.data));
 
-      // go dashboard
-      navigate("/dashboard", { state: res.data });
+      setTimeout(() => {
+        navigate("/dashboard", { state: res.data });
+      }, 1500);
 
     } catch (err) {
       console.log(err);
       alert("Backend connection error ❌");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -85,7 +89,7 @@ export default function Analysis() {
 
             <div className="flex justify-between text-sm text-gray-400">
               <span>Low</span>
-              <span className="text-emerald-400 font-bold">
+              <span className="text-purple-400 font-bold text-lg">
                 {answers[q.name]}
               </span>
               <span>High</span>
@@ -98,18 +102,44 @@ export default function Analysis() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={submit}
-          className="w-full mt-6 py-4 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-semibold text-lg"
+          className="w-full mt-6 py-4 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-semibold text-lg shadow-xl"
         >
           Run AI Risk Analysis
         </motion.button>
 
       </GlassCard>
 
+      {/* 🔥 AI LOADER OVERLAY */}
+      {loading && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-xl flex flex-col items-center justify-center z-50">
+
+          {/* spinning circle */}
+          <div className="animate-spin rounded-full h-28 w-28 border-t-4 border-purple-500 border-opacity-100"></div>
+
+          <h2 className="text-3xl mt-10 text-purple-300 font-bold">
+            AI analyzing your financial personality...
+          </h2>
+
+          <p className="text-gray-400 mt-4 text-lg">
+            Running ML models • Monte Carlo • Behavioral Engine
+          </p>
+
+          <div className="mt-8 space-y-2 text-sm text-gray-500 animate-pulse">
+            <p>✔ Training Random Forest model</p>
+            <p>✔ Evaluating risk tolerance</p>
+            <p>✔ Generating portfolio</p>
+            <p>✔ Running Monte Carlo simulation</p>
+          </div>
+
+        </div>
+      )}
+
     </div>
   );
 }
 
-// 🔥 QUESTIONS (30)
+
+// 🔥 QUESTIONS
 const questions = [
   { name: "q1", text: "I stay calm during market crashes" },
   { name: "q2", text: "I prefer long term investments" },
