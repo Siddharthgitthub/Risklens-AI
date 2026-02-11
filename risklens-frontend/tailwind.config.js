@@ -6,6 +6,9 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+      bebas: ['"Bebas Neue"', 'sans-serif'],
+       },
       colors:{
         neon:"#22c55e"
       }
