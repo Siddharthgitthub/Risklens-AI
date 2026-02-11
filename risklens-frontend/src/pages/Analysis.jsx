@@ -1,39 +1,36 @@
-import AnimatedBackground from "../components/reactbits/AnimatedBackground";
 import GlassCard from "../components/reactbits/GlassCard";
+import { GridScan } from "../components/reactbits/GridScan";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 
 export default function Analysis() {
-
   const navigate = useNavigate();
   const API = import.meta.env.VITE_API_URL;
 
-  // 🔥 answers state
+  // answers state
   const [answers, setAnswers] = useState(
-    Object.fromEntries(
-      Array.from({ length: 30 }, (_, i) => [`q${i + 1}`, 3])
-    )
+    Object.fromEntries(Array.from({ length: 30 }, (_, i) => [`q${i + 1}`, 3])),
   );
 
-  // 🔥 loader state
+  // loader
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setAnswers({
       ...answers,
-      [e.target.name]: Number(e.target.value)
+      [e.target.name]: Number(e.target.value),
     });
   };
 
-  // 🔥 SUBMIT
+  // submit
   const submit = async () => {
     try {
       setLoading(true);
 
       const payload = {
-        answers: Object.values(answers).map(Number)
+        answers: Object.values(answers).map(Number),
       };
 
       console.log("SENDING:", payload);
@@ -47,7 +44,6 @@ export default function Analysis() {
       setTimeout(() => {
         navigate("/dashboard", { state: res.data });
       }, 1500);
-
     } catch (err) {
       console.log(err);
       alert("Backend connection error ❌");
@@ -57,64 +53,79 @@ export default function Analysis() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center text-white relative">
+    <div className="min-h-screen text-white relative overflow-hidden">
+      {/* 🔥 SOFT GRID BACKGROUND */}
+      <div className="absolute inset-0 z-0 opacity-40">
+        <div className="w-full h-full scale-110 blur-[1px]">
+          <GridScan
+            gridScale={0.25} // bigger grid → less dense
+            scanOpacity={0.25} // softer scan
+            scanColor="#8b5cf6"
+            linesColor="#2a2140"
+            bloomIntensity={0.25} // less glow
+            chromaticAberration={0.0008}
+            noiseIntensity={0.005}
+          />
+        </div>
+      </div>
 
-      <AnimatedBackground />
+      {/* 🔥 MAIN CONTENT */}
+      <div className="relative z-10 max-w-5xl mx-auto px-6 py-16">
+        <GlassCard>
+          <h2 className="text-4xl font-bold mb-6 text-center bg-gradient-to-r from-purple-400 to-indigo-400 bg-clip-text text-transparent">
+            AI Behavioral Investor Analysis
+          </h2>
 
-      <GlassCard>
+          <p className="text-gray-400 mb-10 text-center text-lg">
+            Answer honestly to unlock your AI financial personality
+          </p>
 
-        <h2 className="text-3xl font-semibold mb-6 text-center">
-          AI Behavioral Investor Analysis
-        </h2>
+          {/* QUESTIONS GRID */}
+          <div className="grid md:grid-cols-2 gap-x-10 gap-y-8">
+            {questions.map((q, i) => (
+              <div
+                key={i}
+                className="bg-white/5 p-5 rounded-xl border border-white/10"
+              >
+                <label className="text-gray-200">{q.text}</label>
 
-        <p className="text-gray-400 mb-6 text-center">
-          Answer honestly to get accurate AI prediction
-        </p>
+                <input
+                  type="range"
+                  min="1"
+                  max="5"
+                  name={q.name}
+                  value={answers[q.name]}
+                  onChange={handleChange}
+                  className="w-full mt-4 accent-purple-500"
+                />
 
-        {/* QUESTIONS */}
-        {questions.map((q, i) => (
-          <div key={i} className="mb-6">
-
-            <label className="text-gray-300">{q.text}</label>
-
-            <input
-              type="range"
-              min="1"
-              max="5"
-              name={q.name}
-              value={answers[q.name]}
-              onChange={handleChange}
-              className="w-full mt-2"
-            />
-
-            <div className="flex justify-between text-sm text-gray-400">
-              <span>Low</span>
-              <span className="text-purple-400 font-bold text-lg">
-                {answers[q.name]}
-              </span>
-              <span>High</span>
-            </div>
-
+                <div className="flex justify-between text-sm text-gray-400 mt-2">
+                  <span>Low</span>
+                  <span className="text-purple-400 font-bold text-lg">
+                    {answers[q.name]}
+                  </span>
+                  <span>High</span>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
 
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={submit}
-          className="w-full mt-6 py-4 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-semibold text-lg shadow-xl"
-        >
-          Run AI Risk Analysis
-        </motion.button>
+          {/* BUTTON */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={submit}
+            className="w-full mt-12 py-5 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-xl shadow-2xl"
+          >
+            Run AI Risk Analysis 🚀
+          </motion.button>
+        </GlassCard>
+      </div>
 
-      </GlassCard>
-
-      {/* 🔥 AI LOADER OVERLAY */}
+      {/* 🔥 AI LOADER */}
       {loading && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-xl flex flex-col items-center justify-center z-50">
-
-          {/* spinning circle */}
-          <div className="animate-spin rounded-full h-28 w-28 border-t-4 border-purple-500 border-opacity-100"></div>
+          <div className="animate-spin rounded-full h-28 w-28 border-t-4 border-purple-500"></div>
 
           <h2 className="text-3xl mt-10 text-purple-300 font-bold">
             AI analyzing your financial personality...
@@ -130,16 +141,13 @@ export default function Analysis() {
             <p>✔ Generating portfolio</p>
             <p>✔ Running Monte Carlo simulation</p>
           </div>
-
         </div>
       )}
-
     </div>
   );
 }
 
-
-// 🔥 QUESTIONS
+// QUESTIONS
 const questions = [
   { name: "q1", text: "I stay calm during market crashes" },
   { name: "q2", text: "I prefer long term investments" },
@@ -175,5 +183,5 @@ const questions = [
   { name: "q27", text: "I follow expert advice" },
   { name: "q28", text: "I rebalance portfolio" },
   { name: "q29", text: "I monitor performance" },
-  { name: "q30", text: "I learn from past losses" }
+  { name: "q30", text: "I learn from past losses" },
 ];

@@ -1,5 +1,6 @@
 import { useLocation } from "react-router-dom";
 import AnimatedBackground from "../components/reactbits/AnimatedBackground";
+import Squares from "../components/reactbits/Squares";
 import StatCard from "../components/reactbits/StatCard";
 import RadarChart from "../components/reactbits/RadarChart";
 import ModelChart from "../components/reactbits/ModelChart";
@@ -11,7 +12,6 @@ export default function Dashboard() {
   const location = useLocation();
   const saved = localStorage.getItem("risklensData");
   const data = location.state || (saved ? JSON.parse(saved) : null);
-
 
   const [showAdvisor, setShowAdvisor] = useState(false);
 
@@ -34,21 +34,51 @@ export default function Dashboard() {
   const safeWorst = isNaN(simulation.worst) ? 20000 : simulation.worst;
 
   return (
-    <div className="min-h-screen text-white p-10 relative">
-      <AnimatedBackground />
+    <div className="min-h-screen text-white p-10 relative overflow-hidden">
+      {/* 🔥 Animated Squares Background */}
+      <div className="absolute inset-0 z-0 opacity-40">
+        <Squares
+          speed={0.4}
+          squareSize={50}
+          direction="diagonal"
+          borderColor="#2b2145"
+          hoverFillColor="#6d28d9"
+        />
+      </div>
+      <div className="relative z-10"></div>
 
-      <h1 className="text-4xl font-bold mb-10 bg-gradient-to-r from-purple-400 to-indigo-500 bg-clip-text text-transparent">
+      <h1 className="text-5xl font-bold mb-10 text-center bg-gradient-to-r from-purple-400 via-fuchsia-500 to-indigo-500 bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(168,85,247,0.6)]">
         AI Investor Intelligence Dashboard
       </h1>
 
       {/* Top stats */}
       <div className="grid md:grid-cols-3 gap-6">
-        <StatCard title="Risk Profile" value={data.profile} sub={`Score: ${data.score}`} />
-        <StatCard title="Investor Type" value={data.investor_type} sub="ML Predicted" />
-        <StatCard title="Accuracy" value={data.accuracy + "%"} sub="Model accuracy" />
-        <StatCard title="Confidence" value={data.confidence + "%"} sub="AI confidence" />
+        <StatCard
+          title="Risk Profile"
+          value={data.profile}
+          sub={`Score: ${data.score}`}
+        />
+        <StatCard
+          title="Investor Type"
+          value={data.investor_type}
+          sub="ML Predicted"
+        />
+        <StatCard
+          title="Accuracy"
+          value={data.accuracy + "%"}
+          sub="Model accuracy"
+        />
+        <StatCard
+          title="Confidence"
+          value={data.confidence + "%"}
+          sub="AI confidence"
+        />
         <StatCard title="Persona" value={data.persona} sub="Behavioral AI" />
-        <StatCard title="Risk %" value={data.risk_percent + "%"} sub="Overall risk" />
+        <StatCard
+          title="Risk %"
+          value={data.risk_percent + "%"}
+          sub="Overall risk"
+        />
       </div>
 
       {/* Feature importance */}
@@ -74,16 +104,24 @@ export default function Dashboard() {
 
       {/* 2x2 charts */}
       <div className="grid md:grid-cols-2 gap-10 mt-12">
-
-        <div className="bg-white/5 p-6 rounded-2xl">
+        <div
+          className="bg-white/5 backdrop-blur-xl border border-purple-500/20 shadow-[0_0_40px_rgba(124,58,237,0.25)]
+ p-6 rounded-2xl"
+        >
           <RadarChart score={data.score || 50} />
         </div>
 
-        <div className="bg-white/5 p-6 rounded-2xl">
+        <div
+          className="bg-white/5 backdrop-blur-xl border border-purple-500/20 shadow-[0_0_40px_rgba(124,58,237,0.25)]
+ p-6 rounded-2xl"
+        >
           <ModelChart stats={modelStats} />
         </div>
 
-        <div className="bg-white/5 p-6 rounded-2xl">
+        <div
+          className="bg-white/5 backdrop-blur-xl border border-purple-500/20 shadow-[0_0_40px_rgba(124,58,237,0.25)]
+ p-6 rounded-2xl"
+        >
           <MonteCarloChart
             data={{
               median: safeMedian,
@@ -93,15 +131,26 @@ export default function Dashboard() {
           />
         </div>
 
-        <div className="bg-white/5 p-6 rounded-2xl">
+        <div
+          className="bg-white/5 backdrop-blur-xl border border-purple-500/20 shadow-[0_0_40px_rgba(124,58,237,0.25)]
+ p-6 rounded-2xl"
+        >
           <PortfolioPie portfolio={portfolio} />
         </div>
       </div>
 
       {/* Simulation stats */}
       <div className="grid md:grid-cols-3 gap-6 mt-10">
-        <StatCard title="Median" value={"₹" + safeMedian.toFixed(0)} sub="Expected" />
-        <StatCard title="Best" value={"₹" + safeBest.toFixed(0)} sub="Optimistic" />
+        <StatCard
+          title="Median"
+          value={"₹" + safeMedian.toFixed(0)}
+          sub="Expected"
+        />
+        <StatCard
+          title="Best"
+          value={"₹" + safeBest.toFixed(0)}
+          sub="Optimistic"
+        />
         <StatCard title="Worst" value={"₹" + safeWorst.toFixed(0)} sub="Risk" />
       </div>
 
