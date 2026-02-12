@@ -1,5 +1,5 @@
 import GlassCard from "../components/reactbits/GlassCard";
-import { GridScan } from "../components/reactbits/GridScan";
+import Squares from "../components/reactbits/Squares";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -54,24 +54,20 @@ export default function Analysis() {
 
   return (
     <div className="min-h-screen text-white relative overflow-hidden">
-      {/* 🔥 SOFT GRID BACKGROUND */}
-      <div className="absolute inset-0 z-0 opacity-40">
-        <div className="w-full h-full scale-110 blur-[1px]">
-          <GridScan
-            gridScale={0.25} // bigger grid → less dense
-            scanOpacity={0.25} // softer scan
-            scanColor="#8b5cf6"
-            linesColor="#2a2140"
-            bloomIntensity={0.25} // less glow
-            chromaticAberration={0.0008}
-            noiseIntensity={0.005}
-          />
-        </div>
+      {/* 🔥 SQUARES BACKGROUND */}
+      <div className="absolute inset-0 z-0 opacity-30">
+        <Squares
+          speed={0.5}
+          squareSize={45}
+          direction="diagonal"
+          borderColor="#2b2145"
+          hoverFillColor="#7c3aed"
+        />
       </div>
 
       {/* 🔥 MAIN CONTENT */}
       <div className="relative z-10 max-w-5xl mx-auto px-6 py-16">
-        <GlassCard>
+        <GlassCard className="relative z-10 w-[900px] max-w-[95%]">
           <h2 className="text-4xl font-bold mb-6 text-center bg-gradient-to-r from-purple-400 to-indigo-400 bg-clip-text text-transparent">
             AI Behavioral Investor Analysis
           </h2>
