@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>RiskLens AI</title>
+<style>
+body{font-family:Arial;background:#0f172a;color:white;text-align:center}
+.container{margin-top:60px}
+input{padding:8px;margin:5px}
+button{padding:12px 25px;background:#22c55e;border:none;color:white;font-size:16px}
+</style>
+</head>
+
+<body>
+<div class="container">
+<h1>RiskLens AI Behavioral Profiling</h1>
+<h3>Next Gen FinTech Risk Analyzer</h3>
+
+<form action="/analyze" method="post">
+
+<p>Reaction to market crash (1-5)</p>
+<input type="number" name="q1" min="1" max="5" required>
+
+<p>Investment experience (1-5)</p>
+<input type="number" name="q2" min="1" max="5" required>
+
+<p>Risk taking ability (1-5)</p>
+<input type="number" name="q3" min="1" max="5" required>
+
+<p>Confidence in investing (1-5)</p>
+<input type="number" name="q4" min="1" max="5" required>
+
+<p>Reaction to volatility (1-5)</p>
+<input type="number" name="q5" min="1" max="5" required>
+
+<br><br>
+<button type="submit">Analyze Investor</button>
+</form>
+</div>
+</body>
+</html>

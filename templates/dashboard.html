@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dashboard</title>
+</head>
+
+<body style="font-family:Arial; text-align:center">
+
+<h1>RiskLens Result</h1>
+
+<h2>Behavioral Profile</h2>
+<p>Risk Type: {{behavior.profile}}</p>
+<p>Loss Aversion: {{behavior.loss_aversion}}</p>
+<p>Overconfidence: {{behavior.overconfidence}}</p>
+<h2>AI Investor Classification</h2>
+<p>{{group}}</p>
+
+<h2>Simulation Result</h2>
+<p>Median Value: {{sim.median}}</p>
+<p>Best Case: {{sim.best}}</p>
+<p>Worst Case: {{sim.worst}}</p>
+
+<img src="/static/simulation.png" width="500">
+
+<h2>Recommended Portfolio</h2>
+{% for k,v in portfolio.items() %}
+<p>{{k}} : {{v}}</p>
+{% endfor %}
+
+</body>
+</html>
