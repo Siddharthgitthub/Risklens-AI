@@ -44,9 +44,16 @@ def home():
 # ================= PDF REPORT =================
 @app.route("/download-report", methods=["POST"])
 def download_report():
+
     data = request.json
+
     file = generate_report(data)
-    return send_file(file, as_attachment=True)
+
+    return send_file(
+        file,
+        as_attachment=True,
+        download_name="RiskLens_Report.pdf"
+    )
 
 
 # ================= ANALYSIS ROUTE =================
