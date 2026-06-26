@@ -38,7 +38,7 @@ export default function Analysis() {
       const res = await axios.post(`${API}/analyze`, payload);
 
       console.log("BACKEND RESPONSE:", res.data);
-
+      console.log(import.meta.env.VITE_API_URL);
       localStorage.setItem("risklensData", JSON.stringify(res.data));
 
       setTimeout(() => {

@@ -7,14 +7,52 @@ import ModelChart from "../components/reactbits/ModelChart";
 import MonteCarloChart from "../components/reactbits/MonteCarloChart";
 import PortfolioPie from "../components/reactbits/PortfolioPie";
 import { useState } from "react";
-
+import axios from "axios";
 export default function Dashboard() {
   const location = useLocation();
   const saved = localStorage.getItem("risklensData");
   const data = location.state || (saved ? JSON.parse(saved) : null);
-
+  const API = import.meta.env.VITE_API_URL;
   const [showAdvisor, setShowAdvisor] = useState(false);
+  const downloadReport = async () => {
 
+    try {
+
+      const response = await axios.post(
+        `${API}/download-report`,
+        data,
+        {
+          responseType: "blob",
+        }
+      );
+
+      const url = window.URL.createObjectURL(
+        new Blob([response.data])
+      );
+
+      const link = document.createElement("a");
+
+      link.href = url;
+
+      link.download = "RiskLens_Report.pdf";
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      link.remove();
+
+      window.URL.revokeObjectURL(url);
+
+    } catch (err) {
+
+      console.log(err);
+
+      alert("Unable to download report");
+
+    }
+
+};
   if (!data) {
     return (
       <div className="text-white text-center mt-40">
@@ -153,7 +191,28 @@ export default function Dashboard() {
         />
         <StatCard title="Worst" value={"₹" + safeWorst.toFixed(0)} sub="Risk" />
       </div>
+      <div className="flex justify-center mt-12">
 
+      <button
+
+      onClick={downloadReport}
+
+      className="px-10 py-4 rounded-xl
+      bg-gradient-to-r
+      from-green-500
+      to-emerald-600
+      hover:scale-105
+      transition
+      font-bold
+      shadow-xl"
+
+      >
+
+      📄 Download AI Report
+
+      </button>
+
+      </div>
       {/* ===== AI ADVISOR BUTTON ===== */}
       <div className="fixed bottom-6 right-6">
         {!showAdvisor && (
