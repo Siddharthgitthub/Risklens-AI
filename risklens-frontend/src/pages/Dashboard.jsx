@@ -74,7 +74,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen text-white p-10 relative overflow-hidden">
       {/* 🔥 Animated Squares Background */}
-      <div className="absolute inset-0 z-0 opacity-40">
+      <div className="absolute inset-0 -z-10 opacity-25 pointer-events-none">
         <Squares
           speed={0.4}
           squareSize={50}
